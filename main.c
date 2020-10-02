@@ -49,52 +49,59 @@ int main(int argc, char** argv)
     }
     load(argv[1], &pic);
 
-    for(int tam=(pic.width)*(pic.height)-1; tam>=0; tam--) {
-        unsigned char cinza = (0.3 * pic.img[tam].r + 0.59 * pic.img[tam].g + 0.11 * pic.img[tam].b);
-        pic.img[tam].r = cinza;
-        pic.img[tam].g = cinza;
-        pic.img[tam].b = cinza;
-        //printf("[%02X %02X %02X] ", pic.img[tam].r, pic.img[tam].g, pic.img[tam].b); 
+    // Conversão da imagem armazenada em vetor para uma matriz
+    int height = pic.height;
+    int width = pic.width;
+    int size = height*width;
+
+    RGB matriz[height][width];
+
+    int currentHeight = 0;
+    int currentWidth = 0;
+    
+    for(int tam=0; tam<size; tam++) {
+        matriz[currentHeight][currentWidth] = pic.img[tam];
+        currentWidth++;
+        if(currentWidth>width) {
+            currentHeight++;
+            currentWidth=0;
+        }
     }
 
-    Img redimensionada;
-    double fator = 2;
-    //redimensionada.height = (pic.height)*fator;
-    //redimensionada.width = (pic.width)*fator;
-    int redTam = 0;
-
-    RGB newpixels[(pic.height * pic.width)];
-    redimensionada.img = &newpixels;
-
-    int size = (pic.width)*(pic.height);
-
-    for(int tam=0; tam<(size*fator); tam++) {
-        redimensionada.img[redTam].r = pic.img[tam].r;
-        redimensionada.img[redTam].g = pic.img[tam].g;
-        redimensionada.img[redTam].b = pic.img[tam].b;
-        redTam++;
-        // if(redTam==((redimensionada.width)*(redimensionada.height))) {
-        //     break;
-        // }
+    // Conversão da matriz em cinza
+    for(int h = 0; h<height; h++){
+        for(int w = 0; w<width; w++) {
+            unsigned char gray = (0.3 * matriz[h][w].r + 0.59 * matriz[h][w].g + 0.11 * matriz[h][w].b);
+            matriz[h][w].r = gray;
+            matriz[h][w].g = gray;
+            matriz[h][w].b = gray;
+        }
     }
 
-    // for(int tam=(pic.width)*(pic.height)-1; tam>=0; tam--) {
-    //     tam--;
-    //     redimensionada.img[redTam].r = pic.img[tam].r;
-    //     redimensionada.img[redTam].g = pic.img[tam].g;
-    //     redimensionada.img[redTam].b = pic.img[tam].b;
-    //     redTam++;
-    //     if(redTam==((redimensionada.width)*(redimensionada.height))) {
-    //         break;
-    //     }
-    // }
+    //Conversão da matriz de volta em um vetor para testar na API
+    Img new;
+    RGB pixels[size];
 
-    //foo(&pic);
+    new.height = height;
+    new.width = width;
+    new.img = &pixels;
+
+    currentHeight = 0;
+    currentWidth = 0;
+
+    for(int tam=0; tam<size; tam++) {
+        pixels[tam] = matriz[currentHeight][currentWidth];
+        currentWidth++;
+        if(currentWidth>width) {
+            currentHeight++;
+            currentWidth=0;
+        }
+    }
 
     // Exemplo: gravando um arquivo de saída com a imagem (não é necessário para o trabalho, apenas
     // para ver o resultado intermediário, por ex, da conversão para tons de cinza)
-    SOIL_save_image("out.bmp", SOIL_SAVE_TYPE_BMP, redimensionada.width, redimensionada.height,
-        3, (const unsigned char*) redimensionada.img);
+    SOIL_save_image("out.bmp", SOIL_SAVE_TYPE_BMP, new.width, new.height,
+        3, (const unsigned char*) new.img);
 
     // Exemplo: gravando um arquivo saida.html
     FILE* arq = fopen("saida.html", "w"); // criar o arquivo: w
