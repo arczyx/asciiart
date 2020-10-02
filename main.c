@@ -35,8 +35,9 @@ void load(char* name, Img* pic)
 
 void foo(Img* pic)
 {
-    int ns = pic->width * pic->height / 20;
+    int ns = (pic->width * pic->height) * 0.5;
     RGB newpixels[ns];
+    //pic->img = newpixels;
 }
 
 int main(int argc, char** argv)
@@ -53,13 +54,47 @@ int main(int argc, char** argv)
         pic.img[tam].r = cinza;
         pic.img[tam].g = cinza;
         pic.img[tam].b = cinza;
-        printf("[%02X %02X %02X] ", pic.img[tam].r, pic.img[tam].g, pic.img[tam].b); 
+        //printf("[%02X %02X %02X] ", pic.img[tam].r, pic.img[tam].g, pic.img[tam].b); 
     }
+
+    Img redimensionada;
+    double fator = 2;
+    //redimensionada.height = (pic.height)*fator;
+    //redimensionada.width = (pic.width)*fator;
+    int redTam = 0;
+
+    RGB newpixels[(pic.height * pic.width)];
+    redimensionada.img = &newpixels;
+
+    int size = (pic.width)*(pic.height);
+
+    for(int tam=0; tam<(size*fator); tam++) {
+        redimensionada.img[redTam].r = pic.img[tam].r;
+        redimensionada.img[redTam].g = pic.img[tam].g;
+        redimensionada.img[redTam].b = pic.img[tam].b;
+        redTam++;
+        // if(redTam==((redimensionada.width)*(redimensionada.height))) {
+        //     break;
+        // }
+    }
+
+    // for(int tam=(pic.width)*(pic.height)-1; tam>=0; tam--) {
+    //     tam--;
+    //     redimensionada.img[redTam].r = pic.img[tam].r;
+    //     redimensionada.img[redTam].g = pic.img[tam].g;
+    //     redimensionada.img[redTam].b = pic.img[tam].b;
+    //     redTam++;
+    //     if(redTam==((redimensionada.width)*(redimensionada.height))) {
+    //         break;
+    //     }
+    // }
+
+    //foo(&pic);
 
     // Exemplo: gravando um arquivo de saída com a imagem (não é necessário para o trabalho, apenas
     // para ver o resultado intermediário, por ex, da conversão para tons de cinza)
-    SOIL_save_image("out.bmp", SOIL_SAVE_TYPE_BMP, pic.width, pic.height,
-        3, (const unsigned char*) pic.img);
+    SOIL_save_image("out.bmp", SOIL_SAVE_TYPE_BMP, redimensionada.width, redimensionada.height,
+        3, (const unsigned char*) redimensionada.img);
 
     // Exemplo: gravando um arquivo saida.html
     FILE* arq = fopen("saida.html", "w"); // criar o arquivo: w
