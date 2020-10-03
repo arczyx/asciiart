@@ -18,7 +18,6 @@ typedef struct {
 
 // Protótipos
 void load(char* name, Img* pic);
-void foo(Img* pic);
 
 // Carrega uma imagem para a struct Img
 void load(char* name, Img* pic)
@@ -31,13 +30,6 @@ void load(char* name, Img* pic)
         exit(1);
     }
     printf("Load: %d x %d x %d\n", pic->width, pic->height, chan);
-}
-
-void foo(Img* pic)
-{
-    int ns = (pic->width * pic->height) * 0.5;
-    RGB newpixels[ns];
-    //pic->img = newpixels;
 }
 
 int main(int argc, char** argv)
@@ -78,30 +70,110 @@ int main(int argc, char** argv)
         }
     }
 
-    //Conversão da matriz de volta em um vetor para testar na API
-    Img new;
-    RGB pixels[size];
+    // Correção de aspecto para os caracteres
+    RGB pixel;
+    pixel.r = 0;
+    pixel.g = 0;
+    pixel.b = 0;
 
-    new.height = height;
-    new.width = width;
-    new.img = &pixels;
+    int aspectHeight = height/5;
+    int aspectWidth = width/4;
+    int aspectSize = aspectHeight*aspectWidth;
+
+    Img aspect;
+    aspect.height = aspectHeight;
+    aspect.width = aspectWidth;
+    RGB aspectPixels[aspectSize];
+    aspect.img =  &aspectPixels;
 
     currentHeight = 0;
     currentWidth = 0;
+    int currentAspectSize = 0;
+    int sum = 0;
 
-    for(int tam=0; tam<size; tam++) {
-        pixels[tam] = matriz[currentHeight][currentWidth];
-        currentWidth++;
-        if(currentWidth>width) {
-            currentHeight++;
-            currentWidth=0;
+    //int times = 0;
+
+    for(int charsperheight = 0; charsperheight<(height/5); charsperheight++) {
+        currentHeight = charsperheight*5;
+        for(int charsperwidth = 0; charsperwidth<(width/4); charsperwidth++) {//(-1 na condicao)
+            currentWidth = charsperwidth*4;
+            for(int h = currentHeight; h<currentHeight+5; h++) {
+                for(int w = currentWidth; w<currentWidth+4; w++) {
+                    printf("[%d][%d]:%d \n", h, w, matriz[h][w].r);
+                    sum = sum + matriz[h][w].r;
+                    //printf("[%d][%d]: %d ", h, w, pixel.r);
+                    //times++;
+                }
+                //currentWidth = currentWidth + 4;
+            }
+            //printf("sum: %d times: %d", sum, times);
+            //exit(1);
+            sum = sum/20;
+            //printf("d: %d ", sum);
+            //exit(1);
+            pixel.r = sum;
+            pixel.g = sum;
+            pixel.b = sum;
+            sum = 0;
+            
+            aspectPixels[currentAspectSize] = pixel;
+            currentAspectSize++;
         }
     }
 
+
+    
+
+    // while(1) {
+    //     for(int h = currentHeight; h<currentHeight+5; h++) {
+    //         if(h<=height) {
+    //             for(int w = currentWidth; w<currentWidth+4; w++) {
+    //                 if(w<=width) {
+    //                     printf("[%d][%d]: %d ", h, w, sum);
+    //                     sum = sum + matriz[h][w].r;
+    //                     //printf("%d ", matriz[h][w].r);
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     //printf("%d ", sum);
+    //     sum = sum/9;
+    //     //printf("%d ", sum);
+    //     pixel.r = sum;
+    //     aspectPixels[currentAspectSize] = pixel;
+    //     currentAspectSize++;
+    //     currentWidth = currentWidth + 4;
+        
+    //     if(currentWidth>aspectWidth) {
+    //         currentHeight++;
+    //         currentWidth=0;
+    //     }
+    // }
+    
+    // Conversão da matriz de volta em um vetor para testar na API
+    // Img new;
+    // RGB pixels[size];
+
+    // new.height = height;
+    // new.width = width;
+    // new.img = &pixels;
+
+    // currentHeight = 0;
+    // currentWidth = 0;
+
+    // for(int tam=0; tam<size; tam++) {
+    //     pixels[tam] = matriz[currentHeight][currentWidth];
+    //     currentWidth++;
+    //     if(currentWidth>width) {
+    //         currentHeight++;
+    //         currentWidth=0;
+    //     }
+    // }
+
     // Exemplo: gravando um arquivo de saída com a imagem (não é necessário para o trabalho, apenas
     // para ver o resultado intermediário, por ex, da conversão para tons de cinza)
-    SOIL_save_image("out.bmp", SOIL_SAVE_TYPE_BMP, new.width, new.height,
-        3, (const unsigned char*) new.img);
+    SOIL_save_image("out.bmp", SOIL_SAVE_TYPE_BMP, aspect.width, aspect.height,
+        3, (const unsigned char*) aspect.img);
 
     // Exemplo: gravando um arquivo saida.html
     FILE* arq = fopen("saida.html", "w"); // criar o arquivo: w
@@ -115,6 +187,18 @@ int main(int argc, char** argv)
     fprintf(arq,"<head>\n");
     fprintf(arq,"</head>\n");
     fprintf(arq,"<body>\n");
+
+    currentWidth = 0;
+
+    for(int tam=0; tam<aspectSize; tam++) {
+        fprintf(arq,"%d ", aspect.img[tam].r);
+        currentWidth++;
+        if(currentWidth>aspectWidth) {
+            fprintf(arq,"\n");
+            currentWidth = 0;
+        }
+    }
+
     fprintf(arq,"<h1>Oi!</h1>\n");
     fprintf(arq,"</body>\n");
 
