@@ -91,8 +91,6 @@ int main(int argc, char** argv)
     int currentAspectSize = 0;
     int sum = 0;
 
-    //int times = 0;
-
     for(int charsperheight = 0; charsperheight<(height/5); charsperheight++) {
         currentHeight = charsperheight*5;
         for(int charsperwidth = 0; charsperwidth<(width/4)+1; charsperwidth++) {//(-1 na condicao)
@@ -102,18 +100,10 @@ int main(int argc, char** argv)
                 for(int w = currentWidth; w<currentWidth+4; w++) {
                     //printf("[%d][%d] ", h, w);
                     //sleep(1);
-                    //printf("[%d][%d]:%d \n", h, w, matriz[h][w].r);
                     sum = sum + matriz[h][w].r;
-                    //printf("[%d][%d]: %d ", h, w, pixel.r);
-                    //times++;
                 }
-                //currentWidth = currentWidth + 4;
             }
-            //printf("sum: %d times: %d", sum, times);
-            //exit(1);
             sum = sum/20;
-            //printf("d: %d ", sum);
-            //exit(1);
             pixel.r = sum;
             pixel.g = sum;
             pixel.b = sum;
@@ -123,52 +113,6 @@ int main(int argc, char** argv)
             currentAspectSize++;
         }
     }
-
-    // while(1) {
-    //     for(int h = currentHeight; h<currentHeight+5; h++) {
-    //         if(h<=height) {
-    //             for(int w = currentWidth; w<currentWidth+4; w++) {
-    //                 if(w<=width) {
-    //                     printf("[%d][%d]: %d ", h, w, sum);
-    //                     sum = sum + matriz[h][w].r;
-    //                     //printf("%d ", matriz[h][w].r);
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     //printf("%d ", sum);
-    //     sum = sum/9;
-    //     //printf("%d ", sum);
-    //     pixel.r = sum;
-    //     aspectPixels[currentAspectSize] = pixel;
-    //     currentAspectSize++;
-    //     currentWidth = currentWidth + 4;
-        
-    //     if(currentWidth>aspectWidth) {
-    //         currentHeight++;
-    //         currentWidth=0;
-    //     }
-    // }
-    
-    // Conversão da matriz de volta em um vetor para testar na API
-    // Img new;
-    // RGB pixels[size];
-
-    // new.height = height;
-    // new.width = width;
-    // new.img = &pixels;
-
-    // currentHeight = 0;
-    // currentWidth = 0;
-
-    // for(int tam=0; tam<size; tam++) {
-    //     pixels[tam] = matriz[currentHeight][currentWidth];
-    //     currentWidth++;
-    //     if(currentWidth>width) {
-    //         currentHeight++;
-    //         currentWidth=0;
-    //     }
-    // }
 
     // Exemplo: gravando um arquivo de saída com a imagem (não é necessário para o trabalho, apenas
     // para ver o resultado intermediário, por ex, da conversão para tons de cinza)
@@ -213,20 +157,7 @@ int main(int argc, char** argv)
             fprintf(arq,"8");
         } else {
             fprintf(arq,"@");
-        }/*
-        
-        } else if(aspect.img[tam].r < 64) {
-            fprintf(arq,":");
-        } else if(aspect.img[tam].r < 96) {
-            fprintf(arq,"c");
-        } else if(aspect.img[tam].r < 128) {
-            fprintf(arq,"o");
-        } else if(aspect.img[tam].r < 160) {
-            fprintf(arq,"C");
-        } else if(aspect.img[tam].r < 192) {
-            fprintf(arq,"O");
-        } else if(aspect.img[tam].r < 224) {
-        */
+        }
         currentWidth++;
         if(currentWidth>aspectWidth) {
             fprintf(arq,"\n");
