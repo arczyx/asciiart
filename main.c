@@ -95,11 +95,14 @@ int main(int argc, char** argv)
 
     for(int charsperheight = 0; charsperheight<(height/5); charsperheight++) {
         currentHeight = charsperheight*5;
-        for(int charsperwidth = 0; charsperwidth<(width/4); charsperwidth++) {//(-1 na condicao)
+        for(int charsperwidth = 0; charsperwidth<(width/4)+1; charsperwidth++) {//(-1 na condicao)
             currentWidth = charsperwidth*4;
             for(int h = currentHeight; h<currentHeight+5; h++) {
+                //printf("\n");
                 for(int w = currentWidth; w<currentWidth+4; w++) {
-                    printf("[%d][%d]:%d \n", h, w, matriz[h][w].r);
+                    //printf("[%d][%d] ", h, w);
+                    //sleep(1);
+                    //printf("[%d][%d]:%d \n", h, w, matriz[h][w].r);
                     sum = sum + matriz[h][w].r;
                     //printf("[%d][%d]: %d ", h, w, pixel.r);
                     //times++;
@@ -120,9 +123,6 @@ int main(int argc, char** argv)
             currentAspectSize++;
         }
     }
-
-
-    
 
     // while(1) {
     //     for(int h = currentHeight; h<currentHeight+5; h++) {
@@ -183,15 +183,50 @@ int main(int argc, char** argv)
         exit(1);
     }
 
-    fprintf(arq, "<html>\n");
-    fprintf(arq,"<head>\n");
-    fprintf(arq,"</head>\n");
-    fprintf(arq,"<body>\n");
+    fprintf(arq, "<html><head></head>\n");
+    fprintf(arq,"<body style=\"background: black;\" leftmargin=0 topmargin=0>\n");
+    fprintf(arq,"<style>\n");
+    fprintf(arq,"   pre {\n");
+    fprintf(arq,"       color: white;\n");
+    fprintf(arq,"       font-family: Courier;\n");
+    fprintf(arq,"       font-size: 8px;\n");
+    fprintf(arq,"   }\n");
+    fprintf(arq,"</style>\n");
+    fprintf(arq,"<pre>\n");
 
     currentWidth = 0;
 
     for(int tam=0; tam<aspectSize; tam++) {
-        fprintf(arq,"%d ", aspect.img[tam].r);
+        if(aspect.img[tam].r < 32) {
+            fprintf(arq,".");
+        } else if(aspect.img[tam].r < 64) {
+            fprintf(arq,":");
+        } else if(aspect.img[tam].r < 96) {
+            fprintf(arq,"c");
+        } else if(aspect.img[tam].r < 128) {
+            fprintf(arq,"o");
+        } else if(aspect.img[tam].r < 160) {
+            fprintf(arq,"C");
+        } else if(aspect.img[tam].r < 192) {
+            fprintf(arq,"O");
+        } else if(aspect.img[tam].r < 224) {
+            fprintf(arq,"8");
+        } else {
+            fprintf(arq,"@");
+        }/*
+        
+        } else if(aspect.img[tam].r < 64) {
+            fprintf(arq,":");
+        } else if(aspect.img[tam].r < 96) {
+            fprintf(arq,"c");
+        } else if(aspect.img[tam].r < 128) {
+            fprintf(arq,"o");
+        } else if(aspect.img[tam].r < 160) {
+            fprintf(arq,"C");
+        } else if(aspect.img[tam].r < 192) {
+            fprintf(arq,"O");
+        } else if(aspect.img[tam].r < 224) {
+        */
         currentWidth++;
         if(currentWidth>aspectWidth) {
             fprintf(arq,"\n");
@@ -199,8 +234,9 @@ int main(int argc, char** argv)
         }
     }
 
-    fprintf(arq,"<h1>Oi!</h1>\n");
+    fprintf(arq,"\n</pre>\n");
     fprintf(arq,"</body>\n");
+    fprintf(arq,"</html>\n");
 
     fclose(arq);
     free(pic.img);
