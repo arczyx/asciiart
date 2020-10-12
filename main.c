@@ -41,28 +41,17 @@ int main(int argc, char** argv)
     }
     load(argv[1], &pic);
 
-    // Conversão da imagem armazenada em vetor para uma matriz
+    // Variáveis auxiliares
     int height = pic.height;
     int width = pic.width;
     int size = height*width;
-
-    // RGB matriz[height][width];
-
     int currentHeight = 0;
     int currentWidth = 0;
     
-    // for(int tam=0; tam<size; tam++) {
-    //     matriz[currentHeight][currentWidth] = pic.img[tam];
-    //     currentWidth++;
-    //     if(currentWidth>width) {
-    //         currentHeight++;
-    //         currentWidth=0;
-    //     }
-    // }
-
+    // Permite que o vetor de pixeis seja interpretado como uma matriz
     RGB(*out)[pic.width] = (RGB(*)[pic.width]) pic.img;
 
-    // Conversão da matriz em cinza
+    // Conversão da "matriz" em cinza
     for(int h = 0; h<height; h++){
         for(int w = 0; w<width; w++) {
             unsigned char gray = (0.3 * out[h][w].r + 0.59 * out[h][w].g + 0.11 * out[h][w].b);
@@ -72,7 +61,7 @@ int main(int argc, char** argv)
         }
     }
 
-    // Correção de aspecto para os caracteres
+    // Correção de aspecto para os caracteres, gerando uma nova imagem
 
     RGB pixel;
     pixel.r = 0;
@@ -93,13 +82,16 @@ int main(int argc, char** argv)
     currentWidth = 0;
     int currentAspectSize = 0;
     int sum = 0;
-
+    // Percorre a altura
     for(int charsperheight = 0; charsperheight<(height/5); charsperheight++) {
         currentHeight = charsperheight*5;
+        // Percorre a largura
         for(int charsperwidth = 0; charsperwidth<(width/4); charsperwidth++) {
             currentWidth = charsperwidth*4;
+            // Percorre 5 pixeis na altura atual
             for(int h = currentHeight; h<currentHeight+5; h++) {
                 //printf("\n");
+                // Percorre 4 pixeis na largura atual
                 for(int w = currentWidth; w<currentWidth+4; w++) {
                     //printf("[%d][%d] ", h, w);
                     //sleep(1);
@@ -141,35 +133,10 @@ int main(int argc, char** argv)
     fprintf(arq,"</style>\n");
     fprintf(arq,"<pre>\n");
 
-    // currentWidth = 0;
-
-    // for(int tam=0; tam<aspectSize; tam++) {
-    //     if(aspect.img[tam].r < 32) {
-    //         fprintf(arq,".");
-    //     } else if(aspect.img[tam].r < 64) {
-    //         fprintf(arq,":");
-    //     } else if(aspect.img[tam].r < 96) {
-    //         fprintf(arq,"c");
-    //     } else if(aspect.img[tam].r < 128) {
-    //         fprintf(arq,"o");
-    //     } else if(aspect.img[tam].r < 160) {
-    //         fprintf(arq,"C");
-    //     } else if(aspect.img[tam].r < 192) {
-    //         fprintf(arq,"O");
-    //     } else if(aspect.img[tam].r < 224) {
-    //         fprintf(arq,"8");
-    //     } else {
-    //         fprintf(arq,"@");
-    //     }
-    //     currentWidth++;
-    //     if(currentWidth>aspectWidth) {
-    //         fprintf(arq,"\n");
-    //         currentWidth = 0;
-    //     }
-    // }
-
+    // Permite que o vetor de pixeis seja interpretado como uma matriz
     RGB(*out2)[aspect.width] = (RGB(*)[aspect.width]) aspect.img;
 
+    // Imprime os caracteres de acordo com o valor de R armazenado nos pixeis
     for(int h = 0; h<aspect.height; h++) {
         for(int w = 0; w<aspect.width; w++) {
             if(out2[h][w].r < 32) {
