@@ -46,31 +46,34 @@ int main(int argc, char** argv)
     int width = pic.width;
     int size = height*width;
 
-    RGB matriz[height][width];
+    // RGB matriz[height][width];
 
     int currentHeight = 0;
     int currentWidth = 0;
     
-    for(int tam=0; tam<size; tam++) {
-        matriz[currentHeight][currentWidth] = pic.img[tam];
-        currentWidth++;
-        if(currentWidth>width) {
-            currentHeight++;
-            currentWidth=0;
-        }
-    }
+    // for(int tam=0; tam<size; tam++) {
+    //     matriz[currentHeight][currentWidth] = pic.img[tam];
+    //     currentWidth++;
+    //     if(currentWidth>width) {
+    //         currentHeight++;
+    //         currentWidth=0;
+    //     }
+    // }
+
+    RGB(*out)[pic.width] = (RGB(*)[pic.width]) pic.img;
 
     // Conversão da matriz em cinza
     for(int h = 0; h<height; h++){
         for(int w = 0; w<width; w++) {
-            unsigned char gray = (0.3 * matriz[h][w].r + 0.59 * matriz[h][w].g + 0.11 * matriz[h][w].b);
-            matriz[h][w].r = gray;
-            matriz[h][w].g = gray;
-            matriz[h][w].b = gray;
+            unsigned char gray = (0.3 * out[h][w].r + 0.59 * out[h][w].g + 0.11 * out[h][w].b);
+            out[h][w].r = gray;
+            out[h][w].g = gray;
+            out[h][w].b = gray;
         }
     }
 
     // Correção de aspecto para os caracteres
+
     RGB pixel;
     pixel.r = 0;
     pixel.g = 0;
@@ -93,14 +96,14 @@ int main(int argc, char** argv)
 
     for(int charsperheight = 0; charsperheight<(height/5); charsperheight++) {
         currentHeight = charsperheight*5;
-        for(int charsperwidth = 0; charsperwidth<(width/4)+1; charsperwidth++) {//(-1 na condicao)
+        for(int charsperwidth = 0; charsperwidth<(width/4); charsperwidth++) {
             currentWidth = charsperwidth*4;
             for(int h = currentHeight; h<currentHeight+5; h++) {
                 //printf("\n");
                 for(int w = currentWidth; w<currentWidth+4; w++) {
                     //printf("[%d][%d] ", h, w);
                     //sleep(1);
-                    sum = sum + matriz[h][w].r;
+                    sum = sum + out[h][w].r;
                 }
             }
             sum = sum/20;
@@ -138,31 +141,56 @@ int main(int argc, char** argv)
     fprintf(arq,"</style>\n");
     fprintf(arq,"<pre>\n");
 
-    currentWidth = 0;
+    // currentWidth = 0;
 
-    for(int tam=0; tam<aspectSize; tam++) {
-        if(aspect.img[tam].r < 32) {
-            fprintf(arq,".");
-        } else if(aspect.img[tam].r < 64) {
-            fprintf(arq,":");
-        } else if(aspect.img[tam].r < 96) {
-            fprintf(arq,"c");
-        } else if(aspect.img[tam].r < 128) {
-            fprintf(arq,"o");
-        } else if(aspect.img[tam].r < 160) {
-            fprintf(arq,"C");
-        } else if(aspect.img[tam].r < 192) {
-            fprintf(arq,"O");
-        } else if(aspect.img[tam].r < 224) {
-            fprintf(arq,"8");
-        } else {
-            fprintf(arq,"@");
+    // for(int tam=0; tam<aspectSize; tam++) {
+    //     if(aspect.img[tam].r < 32) {
+    //         fprintf(arq,".");
+    //     } else if(aspect.img[tam].r < 64) {
+    //         fprintf(arq,":");
+    //     } else if(aspect.img[tam].r < 96) {
+    //         fprintf(arq,"c");
+    //     } else if(aspect.img[tam].r < 128) {
+    //         fprintf(arq,"o");
+    //     } else if(aspect.img[tam].r < 160) {
+    //         fprintf(arq,"C");
+    //     } else if(aspect.img[tam].r < 192) {
+    //         fprintf(arq,"O");
+    //     } else if(aspect.img[tam].r < 224) {
+    //         fprintf(arq,"8");
+    //     } else {
+    //         fprintf(arq,"@");
+    //     }
+    //     currentWidth++;
+    //     if(currentWidth>aspectWidth) {
+    //         fprintf(arq,"\n");
+    //         currentWidth = 0;
+    //     }
+    // }
+
+    RGB(*out2)[aspect.width] = (RGB(*)[aspect.width]) aspect.img;
+
+    for(int h = 0; h<aspect.height; h++) {
+        for(int w = 0; w<aspect.width; w++) {
+            if(out2[h][w].r < 32) {
+                fprintf(arq,".");
+            } else if(out2[h][w].r < 64) {
+                fprintf(arq,":");
+            } else if(out2[h][w].r < 96) {
+                fprintf(arq,"c");
+            } else if(out2[h][w].r < 128) {
+                fprintf(arq,"o");
+            } else if(out2[h][w].r < 160) {
+                fprintf(arq,"C");
+            } else if(out2[h][w].r < 192) {
+                fprintf(arq,"O");
+            } else if(out2[h][w].r < 224) {
+                fprintf(arq,"8");
+            } else {
+                fprintf(arq,"@");
+            }
         }
-        currentWidth++;
-        if(currentWidth>aspectWidth) {
-            fprintf(arq,"\n");
-            currentWidth = 0;
-        }
+        fprintf(arq,"\n");
     }
 
     fprintf(arq,"\n</pre>\n");
