@@ -49,15 +49,15 @@ int main(int argc, char** argv)
     int currentWidth = 0;
     
     // Permite que o vetor de pixeis seja interpretado como uma matriz
-    RGB(*out)[pic.width] = (RGB(*)[pic.width]) pic.img;
+    RGB(*picM)[pic.width] = (RGB(*)[pic.width]) pic.img;
 
     // Conversão da "matriz" em cinza
     for(int h = 0; h<height; h++){
         for(int w = 0; w<width; w++) {
-            unsigned char gray = (0.3 * out[h][w].r + 0.59 * out[h][w].g + 0.11 * out[h][w].b);
-            out[h][w].r = gray;
-            out[h][w].g = gray;
-            out[h][w].b = gray;
+            unsigned char gray = (0.3 * picM[h][w].r + 0.59 * picM[h][w].g + 0.11 * picM[h][w].b);
+            picM[h][w].r = gray;
+            picM[h][w].g = gray;
+            picM[h][w].b = gray;
         }
     }
 
@@ -78,6 +78,9 @@ int main(int argc, char** argv)
     RGB aspectPixels[aspectSize];
     aspect.img =  &aspectPixels;
 
+    // Permite que o vetor de pixeis seja interpretado como uma matriz
+    RGB(*aspectM)[aspect.width] = (RGB(*)[aspect.width]) aspect.img;
+
     currentHeight = 0;
     currentWidth = 0;
     int currentAspectSize = 0;
@@ -95,7 +98,7 @@ int main(int argc, char** argv)
                 for(int w = currentWidth; w<currentWidth+4; w++) {
                     //printf("[%d][%d] ", h, w);
                     //sleep(1);
-                    sum = sum + out[h][w].r;
+                    sum = sum + picM[h][w].r;
                 }
             }
             sum = sum/20;
@@ -108,6 +111,56 @@ int main(int argc, char** argv)
             currentAspectSize++;
         }
     }
+
+    // // Redimensionar imagem
+
+    // double factor = 0.5;
+
+    // int resizeHeight = aspectHeight*factor;
+    // int resizeWidth = aspectWidth*factor;
+    // int resizeSize = round(resizeHeight*resizeWidth);
+
+    // Img resize;
+    // resize.height = resizeHeight;
+    // resize.width = resizeWidth;
+    // RGB resizePixels[resizeSize];
+    // resize.img = &resizePixels;
+
+    // currentHeight = 0;
+    // currentWidth = 0;
+    // int currentResizeSize = 0;
+
+    // // for(int i = 0; i<resizeSize; i++) {
+    // //     int index = round(i/factor);
+    // //     if(index<=aspectSize) {
+    // //         resizePixels[currentResizeSize] = aspect.img[index];
+    // //     }
+    // //     currentResizeSize++;
+    // // }
+
+    // // Permite que o vetor de pixeis seja interpretado como uma matriz
+    // RGB(*resizeM)[resize.width] = (RGB(*)[resize.width]) resize.img;
+
+    // for(int h = 0; h<resizeHeight; h++) {
+    //     for(int w = 0; w<resizeWidth; w++) {
+    //         int newH = round(h*factor);
+    //         int newW = round(w*factor);
+    //         resizeM[h][w] = aspectM[newH][newW];
+    //     }
+    // }
+
+    // int x1, x2, y1, y2 = 0;
+    // x1 = 100;
+    // x2 = aspect.height;
+    // //y1 = 50;
+    // y2 = (factor * x2) / x1;
+
+    
+
+    // for(int i = 0; i<=y2; i++) {
+
+    //     resizePixels[i] = 
+    // }
 
     // Exemplo: gravando um arquivo de saída com a imagem (não é necessário para o trabalho, apenas
     // para ver o resultado intermediário, por ex, da conversão para tons de cinza)
@@ -136,29 +189,92 @@ int main(int argc, char** argv)
     // Permite que o vetor de pixeis seja interpretado como uma matriz
     RGB(*out2)[aspect.width] = (RGB(*)[aspect.width]) aspect.img;
 
+    // char chars[7];
+
+    printf("Digite os caracteres desejados para a arte, um por vez seguido de ENTER do mais escuro para o mais claro\n");
+    // for(int i = 0; i<=7; i++) {
+    //     printf("Digite o caractere número %d: \n", i);
+    //     scanf(" %c", &chars[i]);
+    //     printf("Carctere: %c \n", chars[i]);
+    // }
+
+    // for(int i = 0; i<=7; i++) {
+    //     printf("Carctere: %c \n", chars[i]);
+    // }
+
+    char c1, c2 ,c3, c4, c5, c6, c7, c8;
+
+    printf("Digite o caractere número 1: \n");
+    scanf(" %c", &c1);
+
+    printf("Digite o caractere número 2: \n");
+    scanf(" %c", &c2);
+
+    printf("Digite o caractere número 3: \n");
+    scanf(" %c", &c3);
+
+    printf("Digite o caractere número 4: \n");
+    scanf(" %c", &c4);
+
+    printf("Digite o caractere número 5: \n");
+    scanf(" %c", &c5);
+
+    printf("Digite o caractere número 6: \n");
+    scanf(" %c", &c6);
+
+    printf("Digite o caractere número 7: \n");
+    scanf(" %c", &c7);
+
+    printf("Digite o caractere número 8: \n");
+    scanf(" %c", &c8);
+
     // Imprime os caracteres de acordo com o valor de R armazenado nos pixeis
     for(int h = 0; h<aspect.height; h++) {
         for(int w = 0; w<aspect.width; w++) {
             if(out2[h][w].r < 32) {
-                fprintf(arq,".");
+                fprintf(arq, "%c", c1);
             } else if(out2[h][w].r < 64) {
-                fprintf(arq,":");
+                fprintf(arq, "%c", c2);
             } else if(out2[h][w].r < 96) {
-                fprintf(arq,"c");
+                fprintf(arq, "%c", c3);
             } else if(out2[h][w].r < 128) {
-                fprintf(arq,"o");
+                fprintf(arq, "%c", c4);
             } else if(out2[h][w].r < 160) {
-                fprintf(arq,"C");
+                fprintf(arq, "%c", c5);
             } else if(out2[h][w].r < 192) {
-                fprintf(arq,"O");
+                fprintf(arq, "%c", c6);
             } else if(out2[h][w].r < 224) {
-                fprintf(arq,"8");
+                fprintf(arq, "%c", c7);
             } else {
-                fprintf(arq,"@");
+                fprintf(arq, "%c", c8);
             }
         }
         fprintf(arq,"\n");
     }
+
+    // // Imprime os caracteres de acordo com o valor de R armazenado nos pixeis
+    // for(int h = 0; h<aspect.height; h++) {
+    //     for(int w = 0; w<aspect.width; w++) {
+    //         if(out2[h][w].r < 32) {
+    //             fprintf(arq,".");
+    //         } else if(out2[h][w].r < 64) {
+    //             fprintf(arq,":");
+    //         } else if(out2[h][w].r < 96) {
+    //             fprintf(arq,"c");
+    //         } else if(out2[h][w].r < 128) {
+    //             fprintf(arq,"o");
+    //         } else if(out2[h][w].r < 160) {
+    //             fprintf(arq,"C");
+    //         } else if(out2[h][w].r < 192) {
+    //             fprintf(arq,"O");
+    //         } else if(out2[h][w].r < 224) {
+    //             fprintf(arq,"8");
+    //         } else {
+    //             fprintf(arq,"@");
+    //         }
+    //     }
+    //     fprintf(arq,"\n");
+    // }
 
     fprintf(arq,"\n</pre>\n");
     fprintf(arq,"</body>\n");
