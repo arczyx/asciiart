@@ -112,56 +112,6 @@ int main(int argc, char** argv)
         }
     }
 
-    // // Redimensionar imagem
-
-    // double factor = 0.5;
-
-    // int resizeHeight = aspectHeight*factor;
-    // int resizeWidth = aspectWidth*factor;
-    // int resizeSize = round(resizeHeight*resizeWidth);
-
-    // Img resize;
-    // resize.height = resizeHeight;
-    // resize.width = resizeWidth;
-    // RGB resizePixels[resizeSize];
-    // resize.img = &resizePixels;
-
-    // currentHeight = 0;
-    // currentWidth = 0;
-    // int currentResizeSize = 0;
-
-    // // for(int i = 0; i<resizeSize; i++) {
-    // //     int index = round(i/factor);
-    // //     if(index<=aspectSize) {
-    // //         resizePixels[currentResizeSize] = aspect.img[index];
-    // //     }
-    // //     currentResizeSize++;
-    // // }
-
-    // // Permite que o vetor de pixeis seja interpretado como uma matriz
-    // RGB(*resizeM)[resize.width] = (RGB(*)[resize.width]) resize.img;
-
-    // for(int h = 0; h<resizeHeight; h++) {
-    //     for(int w = 0; w<resizeWidth; w++) {
-    //         int newH = round(h*factor);
-    //         int newW = round(w*factor);
-    //         resizeM[h][w] = aspectM[newH][newW];
-    //     }
-    // }
-
-    // int x1, x2, y1, y2 = 0;
-    // x1 = 100;
-    // x2 = aspect.height;
-    // //y1 = 50;
-    // y2 = (factor * x2) / x1;
-
-    
-
-    // for(int i = 0; i<=y2; i++) {
-
-    //     resizePixels[i] = 
-    // }
-
     // Exemplo: gravando um arquivo de saída com a imagem (não é necessário para o trabalho, apenas
     // para ver o resultado intermediário, por ex, da conversão para tons de cinza)
     SOIL_save_image("out.bmp", SOIL_SAVE_TYPE_BMP, aspect.width, aspect.height,
@@ -186,21 +136,9 @@ int main(int argc, char** argv)
     fprintf(arq,"</style>\n");
     fprintf(arq,"<pre>\n");
 
-    // Permite que o vetor de pixeis seja interpretado como uma matriz
     RGB(*out2)[aspect.width] = (RGB(*)[aspect.width]) aspect.img;
 
-    // char chars[7];
-
     printf("Digite os caracteres desejados para a arte, um por vez seguido de ENTER do mais escuro para o mais claro\n");
-    // for(int i = 0; i<=7; i++) {
-    //     printf("Digite o caractere número %d: \n", i);
-    //     scanf(" %c", &chars[i]);
-    //     printf("Carctere: %c \n", chars[i]);
-    // }
-
-    // for(int i = 0; i<=7; i++) {
-    //     printf("Carctere: %c \n", chars[i]);
-    // }
 
     char c1, c2 ,c3, c4, c5, c6, c7, c8;
 
@@ -251,30 +189,6 @@ int main(int argc, char** argv)
         }
         fprintf(arq,"\n");
     }
-
-    // // Imprime os caracteres de acordo com o valor de R armazenado nos pixeis
-    // for(int h = 0; h<aspect.height; h++) {
-    //     for(int w = 0; w<aspect.width; w++) {
-    //         if(out2[h][w].r < 32) {
-    //             fprintf(arq,".");
-    //         } else if(out2[h][w].r < 64) {
-    //             fprintf(arq,":");
-    //         } else if(out2[h][w].r < 96) {
-    //             fprintf(arq,"c");
-    //         } else if(out2[h][w].r < 128) {
-    //             fprintf(arq,"o");
-    //         } else if(out2[h][w].r < 160) {
-    //             fprintf(arq,"C");
-    //         } else if(out2[h][w].r < 192) {
-    //             fprintf(arq,"O");
-    //         } else if(out2[h][w].r < 224) {
-    //             fprintf(arq,"8");
-    //         } else {
-    //             fprintf(arq,"@");
-    //         }
-    //     }
-    //     fprintf(arq,"\n");
-    // }
 
     fprintf(arq,"\n</pre>\n");
     fprintf(arq,"</body>\n");
